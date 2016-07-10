@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * Created by Ali Rabiee on 2016-07-10.
+ * There is much room for review and optimization here.
  */
 @Component
 public class TalosClient implements RestClient {
@@ -34,12 +35,6 @@ public class TalosClient implements RestClient {
 
         if ( logger.isDebugEnabled() ) logger.debug( "restURL = " + restURL );
 
-//        final RestTemplate restTemplate = new RestTemplate();
-//
-//        restTemplate.headF
-//
-//        return restTemplate.getForObject( restURL, resultClass );
-
         final WebResource webResource = client.resource( restURL );
 
         final ClientResponse response =
@@ -55,7 +50,6 @@ public class TalosClient implements RestClient {
         final ObjectMapper objectMapper = new ObjectMapper();
 
         return objectMapper.readValue( response.getEntity( String.class ), resultClass );
-//        return response.getEntity( resultClass );
     }
 
     @Override
