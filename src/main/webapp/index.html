@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Talos Test</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+</head>
+<body>
+<p>Choose a post to see the details</p>
+<select id="posts">
+    <option value="-1">--</option>
+</select>
+<br>
+<br>
+<div>Posted by: <b id="user"></b></div>
+<br>
+<div>Title: <b id="title"></b></div>
+<br>
+<div>Post Body: <b id="body"></b></div>
+<script type="text/javascript">
+
+    jQuery.ajax({
+        url: 'api/posts',
+        method: 'GET'
+    }).then(function (items) {
+        jQuery.each(items, function (idx, item) {
+            jQuery('#posts').append($("<option></option>").attr("value", item.id).text(item.title));
+        });
+    });
+
+    var updateDetails = function (user, title, body) {
+        jQuery('#user').html(user);
+        jQuery('#title').html(title);
+        jQuery('#body').html(body);
+    };
+
+    jQuery('#posts').on('change', function () {
+        var id = this.value;
+        if (id == -1) {
+            updateDetails('', '', '');
+        } else {
+            jQuery.ajax({
+                url: 'api/posts/' + id,
+                method: 'GET'
+            }).then(function (item) {
+                updateDetails(item.user, item.title, item.body);
+            });
+        }
+    });
+
+</script>
+</body>
+</html>
